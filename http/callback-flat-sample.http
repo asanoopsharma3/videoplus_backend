@@ -1,0 +1,15 @@
+### Callback — flat query params (same row as your JSON sample)
+### Change requestNo if you already inserted this row (unique constraint).
+@baseUrl = http://localhost:3002/api/v1
+
+GET {{baseUrl}}/callback?serviceType=games_Snapf_96&contentId=-1&resultCode=0&renFlag=Y&requestNo=3000002472604260300&result=Success&OptionalParameter3=UNSUBD&sequenceNo=1300000000018&callingParty=26876024370&newContentId=-1&bearerId=SMS&operationId=YR&requestedPlan=26801220000007963&appliededPlan=26801220000007963_R&chargeAmount=1.0&serviceNode=UNISOLUTION&msisdn=26876024370&serviceId=268012000007658&category=-1&validityDays=1
+
+###
+
+### One-line copy (no variables) — paste into browser or curl
+# GET http://localhost:3002/api/v1/callback?serviceType=games_Snapf_96&contentId=-1&resultCode=0&renFlag=Y&requestNo=3000002472604260300&result=Success&OptionalParameter3=UNSUBD&sequenceNo=1300000000018&callingParty=26876024370&newContentId=-1&bearerId=SMS&operationId=YR&requestedPlan=26801220000007963&appliededPlan=26801220000007963_R&chargeAmount=1.0&serviceNode=UNISOLUTION&msisdn=26876024370&serviceId=268012000007658&category=-1&validityDays=1
+
+###
+
+### curl (PowerShell / bash)
+# curl "http://localhost:3002/api/v1/callback?serviceType=games_Snapf_96&contentId=-1&resultCode=0&renFlag=Y&requestNo=3000002472604260300&result=Success&OptionalParameter3=UNSUBD&sequenceNo=1300000000018&callingParty=26876024370&newContentId=-1&bearerId=SMS&operationId=YR&requestedPlan=26801220000007963&appliededPlan=26801220000007963_R&chargeAmount=1.0&serviceNode=UNISOLUTION&msisdn=26876024370&serviceId=268012000007658&category=-1&validityDays=1"

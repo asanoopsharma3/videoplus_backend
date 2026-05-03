@@ -13,11 +13,25 @@ build/
 
 # Logs
 logs/
+storage/logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.npm/
+.eslintcache
+*.pid
+*.seed
+*.pid.lock
 
 # OS
 .DS_Store
@@ -26,19 +40,12 @@ Desktop.ini
 
 # IDE / editor
 .idea/
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+.vscode/
 *.swp
 *.swo
 *~
 
-# Test / coverage
-coverage/
-.nyc_output/
-
 # Misc
-*.local
-.cache/
 tmp/
 temp/
+*.local
