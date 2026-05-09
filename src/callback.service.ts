@@ -50,38 +50,6 @@ export class CallbackService {
     private readonly repo: Repository<CallbackTransaction>,
   ) {}
 
-  /** Copies payload-built fields onto an existing row (preserves id and createdAt). */
-  private copyMutableFields(
-    from: CallbackTransaction,
-    to: CallbackTransaction,
-  ): void {
-    to.serviceType = from.serviceType;
-    to.contentId = from.contentId;
-    to.resultCode = from.resultCode;
-    to.renFlag = from.renFlag;
-    to.requestNo = from.requestNo;
-    to.logTime = from.logTime;
-    to.optionalParameter3 = from.optionalParameter3;
-    to.sequenceNo = from.sequenceNo;
-    to.callingParty = from.callingParty;
-    to.newContentId = from.newContentId;
-    to.bearerId = from.bearerId;
-    to.operationId = from.operationId;
-    to.requestedPlan = from.requestedPlan;
-    to.appliededPlan = from.appliededPlan;
-    to.chargeAmount = from.chargeAmount;
-    to.serviceNode = from.serviceNode;
-    to.msisdn = from.msisdn;
-    to.serviceId = from.serviceId;
-    to.keyword = from.keyword;
-    to.category = from.category;
-    to.validityDays = from.validityDays;
-    to.status = from.status;
-    to.actionType = from.actionType;
-    to.eventDate = from.eventDate;
-    to.isChargeable = from.isChargeable;
-  }
-
   private buildEntity(
     row: CallbackPayload,
   ):
@@ -130,7 +98,6 @@ export class CallbackService {
 
   async insertFromPayloads(rows: CallbackPayload[]): Promise<{
     inserted: string[];
-    updated: string[];
     duplicates: string[];
     errors: { requestNo: string | null; message: string }[];
   }> {
@@ -139,7 +106,6 @@ export class CallbackService {
     }
 
     const inserted: string[] = [];
-    const updated: string[] = [];
     const duplicates: string[] = [];
     const errors: { requestNo: string | null; message: string }[] = [];
 
@@ -150,32 +116,6 @@ export class CallbackService {
         continue;
       }
       const entity = built.entity;
-
-      const serviceId = entity.serviceId;
-      const msisdn = entity.msisdn;
-      if (serviceId && msisdn) {
-        const existing = await this.repo.findOne({
-          where: { serviceId, msisdn },
-          order: { id: 'DESC' },
-        });
-        if (existing) {
-          try {
-            this.copyMutableFields(entity, existing);
-            const saved = await this.repo.save(existing);
-            updated.push(saved.id);
-          } catch (e) {
-            this.logger.error(
-              `Update failed for requestNo=${entity.requestNo} serviceId=${entity.serviceId} msisdn=${entity.msisdn}`,
-              e,
-            );
-            errors.push({
-              requestNo: entity.requestNo,
-              message: e instanceof Error ? e.message : String(e),
-            });
-          }
-          continue;
-        }
-      }
 
       try {
         const saved = await this.repo.save(entity);
@@ -206,20 +146,14 @@ export class CallbackService {
       }
     }
 
-    if (
-      !inserted.length &&
-      !updated.length &&
-      !duplicates.length &&
-      errors.length
-    ) {
+    if (!inserted.length && !duplicates.length && errors.length) {
       throw new UnprocessableEntityException({
         inserted,
-        updated,
         duplicates,
         errors,
       });
     }
 
-    return { inserted, updated, duplicates, errors };
+    return { inserted, duplicates, errors };
   }
 }
