@@ -33,6 +33,7 @@ export class RequestLogService {
   private readonly logger = new Logger(RequestLogService.name);
   private readonly logRoot: string;
   private readonly enabled: boolean;
+  private readonly consoleEnabled: boolean;
   private readonly maxResponseChars: number;
   private writeChain: Promise<void> = Promise.resolve();
 
@@ -40,6 +41,8 @@ export class RequestLogService {
     const dir = this.config.get<string>('LOG_DIR', 'storage/logs');
     this.logRoot = join(process.cwd(), dir);
     this.enabled = this.config.get<string>('LOG_ENABLED', 'true') !== 'false';
+    this.consoleEnabled =
+      this.config.get<string>('LOG_CONSOLE', 'true') !== 'false';
     this.maxResponseChars = parseInt(
       this.config.get<string>('LOG_MAX_RESPONSE_CHARS') ?? '50000',
       10,
@@ -89,6 +92,10 @@ export class RequestLogService {
       payload.url = entry.url;
     }
     const line = JSON.stringify(payload);
+
+    if (this.consoleEnabled) {
+      process.stdout.write(`${line}\n`);
+    }
 
     const filePath = this.dayFilePath(new Date());
 
